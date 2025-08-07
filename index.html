@@ -4,17 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ishika Sahu - Full Stack Developer Portfolio</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Google Font: Poppins (modern, clean look) -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         /* Custom CSS for animations and scroll behavior */
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #0A0A0A; /* Even darker background to match image */
+            font-family: 'sans-serif';
+            background-color: #0A0A0A; /* Even darker background */
             color: #E0E0E0; /* Light gray text */
             line-height: 1.6;
         }
@@ -59,23 +56,33 @@
             from { width: 0%; }
             to { width: var(--skill-width); }
         }
+        
+        @keyframes subtle-float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes smoke-pulse {
+            0% { opacity: 0.2; transform: scale(0.98); }
+            50% { opacity: 0.4; transform: scale(1.02); }
+            100% { opacity: 0.2; transform: scale(0.98); }
+        }
 
         /* Utility classes for animations */
         .animate-on-scroll {
             opacity: 0;
             transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-            transform: translateY(20px); /* Default for slide-in-bottom */
+            transform: translateY(20px);
         }
         .animate-on-scroll.is-visible {
             opacity: 1;
             transform: translateY(0);
         }
         .animate-slide-left.is-visible {
-            transform: translateX(0);
             animation: slideInFromLeft 0.8s ease-out forwards;
         }
         .animate-slide-right.is-visible {
-            transform: translateX(0);
             animation: slideInFromRight 0.8s ease-out forwards;
         }
         .animate-fade-in.is-visible {
@@ -94,12 +101,12 @@
         }
         .skill-bar-fill {
             height: 100%;
-            background-color: #BB86FC; /* Primary accent color */
+            background: linear-gradient(to right, #A78BFA, #38BDF8);
             border-radius: 9999px;
             width: 0%; /* Initial state for animation */
         }
 
-        /* Hero section specific styles for orbiting effect */
+        /* Hero section specific styles */
         .hero-content-wrapper {
             position: relative;
             display: flex;
@@ -108,171 +115,194 @@
             justify-content: center;
             width: 100%;
             max-width: 1200px;
-            min-height: calc(100vh - 80px); /* Adjust for navbar height */
+            min-height: calc(100vh - 80px);
+            padding-bottom: 5rem;
         }
 
         .hero-image-container {
             position: relative;
-            z-index: 20;
-            margin-top: 4rem; /* Spacing for mobile */
-        }
-
-        .hero-orbit-icon {
-            position: absolute;
-            animation: orbit 15s linear infinite; /* Adjust speed as needed */
-            font-size: 1.5rem; /* Adjust icon size */
-            color: #BB86FC; /* Purple accent color */
-            background-color: #121212; /* Match body background for a floating effect */
-            border-radius: 50%;
-            padding: 0.5rem;
-            box-shadow: 0 0 10px rgba(187, 134, 252, 0.5); /* Glowing effect */
             z-index: 10;
+            margin-top: 4rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* Define orbit animation for different positions */
-        @keyframes orbit {
-            0% { transform: translate(var(--start-x), var(--start-y)) rotate(0deg); }
-            100% { transform: translate(var(--start-x), var(--start-y)) rotate(360deg); }
+        .purple-glow-shadow {
+             box-shadow: 0 0 35px rgba(56, 189, 248, 0.4), 0 0 15px rgba(56, 189, 248, 0.3);
         }
 
-        /* Adjust positions for orbiting elements (smaller radius) */
-        /* These values are relative to the center of the image container */
-        .orbit-icon-1 { /* Top-left */
-            --start-x: -100px;
-            --start-y: -100px;
+        .image-glow-effect::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.3) 0%, rgba(56, 189, 248, 0) 70%);
+            z-index: 21;
+            animation: smoke-pulse 8s ease-in-out infinite;
+            pointer-events: none;
         }
-        .orbit-icon-2 { /* Top-right */
-            --start-x: 100px;
-            --start-y: -100px;
-            animation-delay: 3s;
+        
+        .static-icon {
+            position: absolute;
+            font-size: 1.75rem;
+            color: rgba(56, 189, 248);
+            background-color: #121212;
+            border-radius: 50%;
+            padding: 0.75rem;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            animation: subtle-float 4s ease-in-out infinite;
         }
-        .orbit-icon-3 { /* Bottom-left */
-            --start-x: -100px;
-            --start-y: 100px;
-            animation-delay: 6s;
-        }
-        .orbit-icon-4 { /* Bottom-right */
-            --start-x: 100px;
-            --start-y: 100px;
-            animation-delay: 9s;
-        }
+        
+        .icon-top { top: -25px; left: 50%; transform: translateX(-50%); animation-delay: 0s; }
+        .icon-bottom { bottom: -25px; left: 50%; transform: translateX(-50%); animation-delay: -2s; }
+        .icon-left { left: -25px; top: 50%; transform: translateY(-50%); animation-delay: -1s; }
+        .icon-right { right: -25px; top: 50%; transform: translateY(-50%); animation-delay: -3s; }
 
-        /* Media queries for responsive layout */
-        @media (min-width: 768px) { /* md breakpoint */
+        @media (min-width: 768px) {
             .hero-content-wrapper {
                 flex-direction: row;
                 justify-content: space-between;
-                text-align: left; /* Align text left on desktop */
+                text-align: left;
             }
             .hero-image-container {
-                margin-top: 0; /* Remove top margin on desktop */
+                margin-top: 0;
             }
-            /* Adjust orbit radius for larger screens */
-            .orbit-icon-1 { --start-x: -120px; --start-y: -120px; }
-            .orbit-icon-2 { --start-x: 120px; --start-y: -120px; }
-            .orbit-icon-3 { --start-x: -120px; --start-y: 120px; }
-            .orbit-icon-4 { --start-x: 120px; --start-y: 120px; }
+        }
+        
+        @media (max-width: 420px) {
+            .icon-top { top: -20px; }
+            .icon-bottom { bottom: -20px; }
+            .icon-left { left: -20px; }
+            .icon-right { right: -20px; }
+        }
+        
+        /* Gradient text for H1 */
+        .gradient-text {
+            background: linear-gradient(to right, #A78BFA, #38BDF8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
         }
 
-        @media (min-width: 1024px) { /* lg breakpoint */
-            /* Further adjust orbit radius for even larger screens */
-            .orbit-icon-1 { --start-x: -150px; --start-y: -150px; }
-            .orbit-icon-2 { --start-x: 150px; --start-y: -150px; }
-            .orbit-icon-3 { --start-x: -150px; --start-y: 150px; }
-            .orbit-icon-4 { --start-x: 150px; --start-y: 150px; }
+        /* Gradient background utility */
+        .gradient-bg {
+             background: linear-gradient(to right, #A78BFA, #38BDF8);
+        }
+
+        /* Gradient button */
+        .gradient-button {
+            background: linear-gradient(to right, #A78BFA, #38BDF8);
+            transition: all 0.3s ease;
+        }
+        .gradient-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px A20px rgba(167, 139, 250, 0.4);
+        }
+
+        .sub-head {
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(to right, #A78BFA, #38BDF8);
+            border-image-slice: 1;
+            transition: all 0.3s ease;
         }
     </style>
 </head>
 <body class="bg-gray-950 text-gray-200">
 
-    <!-- Navbar -->
     <nav class="fixed w-full z-50 bg-gray-900 bg-opacity-90 shadow-lg py-4 px-4 md:px-8">
         <div class="container mx-auto flex justify-between items-center">
-            <a href="#home" class="text-3xl font-bold text-purple-400 hover:text-purple-300 transition-colors duration-300">Ishika Sahu</a>
+            <a href="#home" class="text-3xl font-bold gradient-text hover:opacity-80 transition-opacity duration-300">Ishika Sahu</a>
             <div class="hidden md:flex space-x-8">
-                <a href="#home" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 font-medium">Home</a>
-                <a href="#about" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 font-medium">About</a>
-                <a href="#skills" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 font-medium">Skills</a>
-                <a href="#projects" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 font-medium">Projects</a>
-                <a href="#experience" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 font-medium">Experience</a>
-                <a href="#certifications" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 font-medium">Certifications</a>
-                <a href="#contact" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 font-medium">Contact</a>
+                <a href="#home" class="text-gray-300 hover:text-sky-400 transition-colors duration-300 font-medium">Home</a>
+                <a href="#about" class="text-gray-300 hover:text-sky-400 transition-colors duration-300 font-medium">About</a>
+                <a href="#skills" class="text-gray-300 hover:text-sky-400 transition-colors duration-300 font-medium">Skills</a>
+                <a href="#projects" class="text-gray-300 hover:text-sky-400 transition-colors duration-300 font-medium">Projects</a>
+                <a href="#experience" class="text-gray-300 hover:text-sky-400 transition-colors duration-300 font-medium">Experience</a>
+                <a href="#certifications" class="text-gray-300 hover:text-sky-400 transition-colors duration-300 font-medium">Certifications</a>
+                <a href="#contact" class="text-gray-300 hover:text-sky-400 transition-colors duration-300 font-medium">Contact</a>
             </div>
-            <!-- Mobile menu button -->
-            <button id="mobile-menu-button" class="md:hidden text-gray-300 hover:text-purple-400 focus:outline-none">
+            <button id="mobile-menu-button" class="md:hidden text-gray-300 hover:text-sky-400 focus:outline-none">
                 <i class="fas fa-bars text-2xl"></i>
             </button>
         </div>
-        <!-- Mobile menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-gray-800 py-2 mt-4 rounded-lg shadow-md">
-            <a href="#home" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-purple-400 transition-colors duration-300">Home</a>
-            <a href="#about" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-purple-400 transition-colors duration-300">About</a>
-            <a href="#skills" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-purple-400 transition-colors duration-300">Skills</a>
-            <a href="#projects" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-purple-400 transition-colors duration-300">Projects</a>
-            <a href="#experience" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-purple-400 transition-colors duration-300">Experience</a>
-            <a href="#certifications" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-purple-400 transition-colors duration-300">Certifications</a>
-            <a href="#contact" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-purple-400 transition-colors duration-300">Contact</a>
+            <a href="#home" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition-colors duration-300">Home</a>
+            <a href="#about" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition-colors duration-300">About</a>
+            <a href="#skills" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition-colors duration-300">Skills</a>
+            <a href="#projects" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition-colors duration-300">Projects</a>
+            <a href="#experience" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition-colors duration-300">Experience</a>
+            <a href="#certifications" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition-colors duration-300">Certifications</a>
+            <a href="#contact" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-sky-400 transition-colors duration-300">Contact</a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section id="home" class="relative min-h-screen flex items-center justify-center px-4 pt-20 bg-gray-950 overflow-hidden">
         <div class="relative z-10 p-6 rounded-xl hero-content-wrapper">
-            <!-- Text Content -->
-            <div class="md:w-1/2 text-center md:text-left mb-8 md:mb-0 animate-on-scroll animate-slide-left delay-100">
+            <div class="md:w-1/2 text-center md:text-left mb-16 md:mb-0 animate-on-scroll animate-slide-left delay-100">
                 <p class="text-xl md:text-2xl text-purple-300 mb-2">Hello, I'm</p>
-                <h1 class="text-5xl md:text-7xl font-extrabold text-white leading-tight mb-4">
+               <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-4 gradient-text">
                     Ishika Sahu
                 </h1>
-                <p class="text-2xl md:text-4xl font-light text-gray-300 mb-8">
+                <p class="text-2xl md:text-3xl font-light text-gray-300 mb-8 sub-head inline-block">
                     Full Stack Developer
                 </p>
                 <p class="max-w-xl mx-auto md:mx-0 text-lg md:text-xl text-gray-400 mb-12">
                     Passionate about crafting innovative web solutions, machine learning applications, and cloud architectures. I enjoy solving complex problems and delivering exceptional user experiences.
                 </p>
-                <div class="flex flex-col md:flex-row justify-center md:justify-start space-y-4 md:space-y-0 md:space-x-6">
-                    <a href="#contact" class="px-8 py-3 bg-purple-600 text-white font-semibold rounded-full shadow-lg hover:bg-purple-700 transition-all transform hover:scale-105 duration-300">
+                <div class="flex flex-col md:flex-row items-center justify-center md:justify-start space-y-4 md:space-y-0 md:space-x-6">
+                    <a href="#contact" class="gradient-button px-8 py-3 text-white font-semibold rounded-full shadow-lg transition-all transform hover:scale-105 duration-300">
                         Get in Touch
                     </a>
-                    <a href="#projects" class="px-8 py-3 border-2 border-purple-600 text-purple-400 font-semibold rounded-full shadow-lg hover:bg-purple-600 hover:text-white transition-all transform hover:scale-105 duration-300">
+                    <a href="#projects" class="px-8 py-3 border-2 border-sky-500 text-sky-400 font-semibold rounded-full shadow-lg hover:bg-sky-500 hover:text-white transition-all transform hover:scale-105 duration-300">
                         View My Work
                     </a>
+                    <a href="https://www.linkedin.com/in/ishika-sahu-0709" target="_blank" class="text-gray-400 hover:text-sky-400 transition-colors duration-300 text-3xl md:text-2xl">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://github.com/ishikasahu" target="_blank" class="text-gray-400 hover:text-sky-400 transition-colors duration-300 text-3xl md:text-2xl">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="Ishika_Resume_updated_iitj_final.pdf" target="_blank" class="text-gray-400 hover:text-sky-400 transition-colors duration-300 text-3xl md:text-2xl">
+                        <i class="fas fa-file-alt"></i> </a>
                 </div>
             </div>
 
-            <!-- Image Container with Orbiting Icons -->
-            <div class="md:w-1/2 flex justify-center items-center relative hero-image-container animate-on-scroll animate-slide-right delay-200">
-                <div class="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden shadow-2xl border-4 border-purple-600">
-                    <img src="https://placehold.co/320x320/4A00E0/FFFFFF?text=Ishika" alt="Ishika Sahu Profile" class="w-full h-full object-cover">
+            <div class="md:w-1/2 flex justify-center md:justify-end items-center relative hero-image-container animate-on-scroll animate-slide-right delay-200" style="height: 320px; width: 320px;">
+                <div class="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden z-20 image-glow-effect purple-glow-shadow">
+                    <img src="17534415150382.jpg" alt="Ishika Sahu Profile" class="w-full h-full object-cover">
                 </div>
-                <!-- Orbiting Icon Elements -->
-                <div class="hero-orbit-icon orbit-icon-1"><i class="fab fa-react"></i></div>
-                <div class="hero-orbit-icon orbit-icon-2"><i class="fab fa-docker"></i></div>
-                <div class="hero-orbit-icon orbit-icon-3"><i class="fab fa-linkedin-in"></i></div>
-                <div class="hero-orbit-icon orbit-icon-4"><i class="fab fa-github"></i></div>
+                
+                <div class="static-icon icon-top"><i class="fab fa-react"></i></div>
+                <div class="static-icon icon-bottom"><i class="fab fa-node-js"></i></div>
+                <div class="static-icon icon-left"><i class="fab fa-aws"></i></div>
+                <div class="static-icon icon-right"><i class="fab fa-docker"></i></div>
             </div>
-        </div>
-        <div class="absolute bottom-10 text-gray-500 text-sm animate-on-scroll animate-fade-in delay-300">
-            <a href="#" class="mt-2 animate-bounce text-purple-400">Scroll <i class="fas fa-arrow-down"></i></a>
         </div>
     </section>
 
-    <!-- About Me Section -->
     <section id="about" class="py-20 px-4 bg-gradient-to-br from-gray-900 to-gray-800">
         <div class="container mx-auto max-w-5xl">
-            <h2 class="text-4xl font-bold text-center mb-12 text-purple-400 animate-on-scroll animate-fade-in">About Me</h2>
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text animate-on-scroll animate-fade-in">About Me</h2>
             <div class="flex flex-col md:flex-column items-center md:space-x-12 mt-8">
                 <div class="md:w-full text-lg leading-relaxed animate-on-scroll animate-slide-left delay-100">
                     <p class="mb-4 text-center text-gray-300 pb-4">
                         I'm Ishika Sahu, a tech enthusiast and creative problem solver passionate about development, design, and innovation. Currently working as a Technical Assistant at IIT Jodhpur, I blend technical expertise with creative solutions. From backend engineering to UI/UX design, I enjoy building efficient and elegant solutions. My journey spans software development, cloud computing, and technical support, with hands-on experience in AWS, Docker, JavaScript, WordPress, and ReactJS. Beyond code, I thrive in collaborative environments and love designing graphics with Adobe Photoshop and Illustrator. I believe continuous learning and teamwork are the keys to meaningful innovation.</p>
                 </div>
-                <div class="flex flex-col md:flex-row md:w-full mt-10 md:mt-0 space-x-8 animate-on-scroll animate-slide-right delay-200">
+                <div class="flex flex-col md:flex-row md:w-full mt-10 md:mt-0 space-y-4 md:space-y-0 md:space-x-8 animate-on-scroll animate-slide-right delay-200">
                     <div class="md:w-1/2 bg-gray-800 p-6 rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-purple-700 transform hover:scale-105">
-                        <h3 class="text-2xl font-semibold mb-4 text-purple-300"><i class="fas fa-graduation-cap mr-3 text-purple-400"></i>Education</h3>
+                        <h3 class="text-2xl font-semibold mb-4 text-purple-300"><i class="fas fa-graduation-cap mr-3 gradient-text"></i>Education</h3>
                         <p class="text-gray-300">B.Tech in Information Technology, Guru Ghasidas University (2019–2023)</p>
                     </div>
-                    <div class="md:w-1/2 bg-gray-800 p-6 rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-purple-700 transform hover:scale-105">
-                        <h3 class="text-2xl font-semibold mb-4 text-purple-300"><i class="fas fa-bolt mr-3 text-purple-400"></i>Interests</h3>
+                    <div class="md:w-1/2 bg-gray-800 p-6 rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-sky-700 transform hover:scale-105">
+                        <h3 class="text-2xl font-semibold mb-4 text-sky-300"><i class="fas fa-bolt mr-3 gradient-text"></i>Interests</h3>
                         <p class="text-gray-300">Software Development, Cloud Computing, Design, Innovation</p>
                     </div>
                 </div>
@@ -280,28 +310,27 @@
         </div>
     </section>
 
-    <!-- What I Do Section (Services) -->
     <section id="services" class="py-20 px-4 bg-gray-950">
         <div class="container mx-auto max-w-5xl">
-            <h2 class="text-4xl font-bold text-center mb-12 text-purple-400 animate-on-scroll animate-fade-in">What I Do</h2>
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text animate-on-scroll animate-fade-in">What I Do</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div class="bg-gray-900 p-6 rounded-lg shadow-md text-center animate-on-scroll animate-slide-in-from-bottom delay-100 hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 border border-gray-800">
-                    <i class="fas fa-laptop-code text-5xl text-purple-400 mb-4"></i>
+                    <i class="fas fa-laptop-code text-5xl gradient-text mb-4"></i>
                     <h3 class="text-xl font-semibold mb-2 text-white">Web Development</h3>
                     <p class="text-gray-400 text-sm">HTML, CSS, JavaScript, ReactJS, WordPress, MySQL, PHP, and CRM integrations</p>
                 </div>
                 <div class="bg-gray-900 p-6 rounded-lg shadow-md text-center animate-on-scroll animate-slide-in-from-bottom delay-200 hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 border border-gray-800">
-                    <i class="fas fa-cloud text-5xl text-purple-400 mb-4"></i>
+                    <i class="fas fa-cloud text-5xl gradient-text mb-4"></i>
                     <h3 class="text-xl font-semibold mb-2 text-white">Cloud & DevOps</h3>
                     <p class="text-gray-400 text-sm">AWS Cloud Computing, Docker, Git & GitHub, Apache Server</p>
                 </div>
                 <div class="bg-gray-900 p-6 rounded-lg shadow-md text-center animate-on-scroll animate-slide-in-from-bottom delay-300 hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 border border-gray-800">
-                    <i class="fas fa-tools text-5xl text-purple-400 mb-4"></i>
+                    <i class="fas fa-tools text-5xl gradient-text mb-4"></i>
                     <h3 class="text-xl font-semibold mb-2 text-white">Technical Support</h3>
                     <p class="text-gray-400 text-sm">IT Infrastructure Support, Software & Hardware Troubleshooting, Technical Documentation</p>
                 </div>
                 <div class="bg-gray-900 p-6 rounded-lg shadow-md text-center animate-on-scroll animate-slide-in-from-bottom delay-400 hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 border border-gray-800">
-                    <i class="fas fa-palette text-5xl text-purple-400 mb-4"></i>
+                    <i class="fas fa-palette text-5xl gradient-text mb-4"></i>
                     <h3 class="text-xl font-semibold mb-2 text-white">Creative Design</h3>
                     <p class="text-gray-400 text-sm">Adobe Photoshop, Adobe Illustrator, UI/UX Design, Graphic Design</p>
                 </div>
@@ -309,10 +338,9 @@
         </div>
     </section>
 
-    <!-- Skills Section -->
     <section id="skills" class="py-20 px-4 bg-gray-900">
         <div class="container mx-auto max-w-5xl">
-            <h2 class="text-4xl font-bold text-center mb-12 text-purple-400 animate-on-scroll animate-fade-in">My Skills & Expertise</h2>
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text animate-on-scroll animate-fade-in">My Skills & Expertise</h2>
 
             <div class="flex flex-wrap justify-center gap-4 mb-12 animate-on-scroll animate-fade-in delay-100">
                 <button class="skill-filter-btn px-6 py-2 rounded-full bg-purple-600 text-white font-semibold hover:bg-purple-700 transition-colors duration-300" data-filter="all">🌟 All</button>
@@ -323,154 +351,13 @@
             </div>
 
             <div id="skills-container" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Frontend Skills -->
-                <div class="skill-item animate-on-scroll animate-skill-bar delay-100" data-category="frontend">
-                    <h3 class="text-lg font-semibold mb-2 text-white"><i class="fab fa-html5 mr-2 text-orange-500"></i>HTML/CSS</h3>
-                    <div class="skill-bar-bg">
-                        <div class="skill-bar-fill" style="--skill-width: 90%;"></div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
                 </div>
-                <div class="skill-item animate-on-scroll animate-skill-bar delay-200" data-category="frontend">
-                    <h3 class="text-lg font-semibold mb-2 text-white"><i class="fab fa-js-square mr-2 text-yellow-500"></i>JavaScript</h3>
-                    <div class="skill-bar-bg">
-                        <div class="skill-bar-fill" style="--skill-width: 85%;"></div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
-                </div>
-                <div class="skill-item animate-on-scroll animate-skill-bar delay-300" data-category="frontend">
-                    <h3 class="text-lg font-semibold mb-2 text-white"><i class="fab fa-react mr-2 text-blue-400"></i>React.js</h3>
-                    <div class="skill-bar-bg">
-                        <div class="skill-bar-fill" style="--skill-width: 85%;"></div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
-                </div>
-                <div class="skill-item animate-on-scroll animate-skill-bar delay-400" data-category="frontend">
-                    <h3 class="text-lg font-semibold mb-2 text-white"><i class="fas fa-code mr-2 text-blue-500"></i>TypeScript</h3>
-                    <div class="skill-bar-bg">
-                        <div class="skill-bar-fill" style="--skill-width: 80%;"></div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
-                </div>
-                <div class="skill-item animate-on-scroll animate-skill-bar delay-500" data-category="frontend">
-                    <h3 class="text-lg font-semibold mb-2 text-white"><i class="fas fa-paint-brush mr-2 text-pink-400"></i>UI/UX Design</h3>
-                    <div class="skill-bar-bg">
-                        <div class="skill-bar-fill" style="--skill-width: 75%;"></div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
-                </div>
-
-                <!-- Backend Skills -->
-                <div class="skill-item animate-on-scroll animate-skill-bar delay-600" data-category="backend">
-                    <h3 class="text-lg font-semibold mb-2 text-white"><i class="fab fa-node-js mr-2 text-green-500"></i>Node.js</h3>
-                    <div class="skill-bar-bg">
-                        <div class="skill-bar-fill" style="--skill-width: 80%;"></div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
-                </div>
-                <div class="skill-item animate-on-scroll animate-skill-bar delay-700" data-category="backend">
-                    <h3 class="text-lg font-semibold mb-2 text-white"><i class="fab fa-python mr-2 text-blue-600"></i>Python</h3>
-                    <div class="skill-bar-bg">
-                        <div class="skill-bar-fill" style="--skill-width: 85%;"></div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
-                </div>
-                <div class="skill-item animate-on-scroll animate-skill-bar delay-800" data-category="backend">
-                    <h3 class="text-lg font-semibold mb-2 text-white"><i class="fab fa-java mr-2 text-red-500"></i>Java</h3>
-                    <div class="skill-bar-bg">
-                        <div class="skill-bar-fill" style="--skill-width: 70%;"></div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
-                </div>
-                <div class="skill-item animate-on-scroll animate-skill-bar delay-900" data-category="backend">
-                    <h3 class="text-lg font-semibold mb-2 text-white"><i class="fas fa-database mr-2 text-gray-400"></i>SQL/NoSQL</h3>
-                    <div class="skill-bar-bg">
-                        <div class="skill-bar-fill" style="--skill-width: 75%;"></div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
-                </div>
-                <div class="skill-item animate-on-scroll animate-skill-bar delay-1000" data-category="backend">
-                    <h3 class="text-lg font-semibold mb-2 text-white"><i class="fas fa-exchange-alt mr-2 text-purple-400"></i>RESTful APIs</h3>
-                    <div class="skill-bar-bg">
-                        <div class="skill-bar-fill" style="--skill-width: 85%;"></div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
-                </div>
-
-                <!-- Tools Skills -->
-                <div class="skill-item animate-on-scroll animate-skill-bar delay-100" data-category="tools">
-                    <h3 class="text-lg font-semibold mb-2 text-white"><i class="fab fa-git-alt mr-2 text-orange-600"></i>Git & GitHub</h3>
-                    <div class="skill-bar-bg">
-                        <div class="skill-bar-fill" style="--skill-width: 90%;"></div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
-                </div>
-                <div class="skill-item animate-on-scroll animate-skill-bar delay-200" data-category="tools">
-                    <h3 class="text-lg font-semibold mb-2 text-white"><i class="fab fa-docker mr-2 text-blue-600"></i>Docker</h3>
-                    <div class="skill-bar-bg">
-                        <div class="skill-bar-fill" style="--skill-width: 75%;"></div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
-                </div>
-                <div class="skill-item animate-on-scroll animate-skill-bar delay-300" data-category="tools">
-                    <h3 class="text-lg font-semibold mb-2 text-white"><i class="fas fa-cogs mr-2 text-gray-500"></i>CI/CD</h3>
-                    <div class="skill-bar-bg">
-                        <div class="skill-bar-fill" style="--skill-width: 70%;"></div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
-                </div>
-                <div class="skill-item animate-on-scroll animate-skill-bar delay-400" data-category="tools">
-                    <h3 class="text-lg font-semibold mb-2 text-white"><i class="fas fa-flask mr-2 text-green-400"></i>Testing</h3>
-                    <div class="skill-bar-bg">
-                        <div class="skill-bar-fill" style="--skill-width: 75%;"></div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
-                </div>
-                <div class="skill-item animate-on-scroll animate-skill-bar delay-500" data-category="tools">
-                    <h3 class="text-lg font-semibold mb-2 text-white"><i class="fas fa-project-diagram mr-2 text-teal-400"></i>Agile/Scrum</h3>
-                    <div class="skill-bar-bg">
-                        <div class="skill-bar-fill" style="--skill-width: 80%;"></div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
-                </div>
-
-                <!-- Cloud Skills -->
-                <div class="skill-item animate-on-scroll animate-skill-bar delay-600" data-category="cloud">
-                    <h3 class="text-lg font-semibold mb-2 text-white"><i class="fab fa-aws mr-2 text-orange-400"></i>AWS</h3>
-                    <div class="skill-bar-bg">
-                        <div class="skill-bar-fill" style="--skill-width: 80%;"></div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
-                </div>
-                <div class="skill-item animate-on-scroll animate-skill-bar delay-700" data-category="cloud">
-                    <h3 class="text-lg font-semibold mb-2 text-white"><i class="fab fa-microsoft mr-2 text-blue-500"></i>Azure</h3>
-                    <div class="skill-bar-bg">
-                        <div class="skill-bar-fill" style="--skill-width: 70%;"></div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
-                </div>
-                <div class="skill-item animate-on-scroll animate-skill-bar delay-800" data-category="cloud">
-                    <h3 class="text-lg font-semibold mb-2 text-white"><i class="fas fa-cube mr-2 text-blue-700"></i>Kubernetes</h3>
-                    <div class="skill-bar-bg">
-                        <div class="skill-bar-fill" style="--skill-width: 65%;"></div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
-                </div>
-                <div class="skill-item animate-on-scroll animate-skill-bar delay-900" data-category="cloud">
-                    <h3 class="text-lg font-semibold mb-2 text-white"><i class="fas fa-building mr-2 text-gray-500"></i>Cloud Architecture</h3>
-                    <div class="skill-bar-bg">
-                        <div class="skill-bar-fill" style="--skill-width: 75%;"></div>
-                    </div>
-                    <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
-                </div>
-            </div>
         </div>
     </section>
 
-    <!-- Projects Section -->
     <section id="projects" class="py-20 px-4 bg-gray-950">
         <div class="container mx-auto max-w-5xl">
-            <h2 class="text-4xl font-bold text-center mb-12 text-purple-400 animate-on-scroll animate-fade-in">My Projects & Work</h2>
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text animate-on-scroll animate-fade-in">My Projects & Work</h2>
 
             <div class="flex flex-wrap justify-center gap-4 mb-12 animate-on-scroll animate-fade-in delay-100">
                 <button class="project-filter-btn px-6 py-2 rounded-full bg-purple-600 text-white font-semibold hover:bg-purple-700 transition-colors duration-300" data-filter="all">All Projects</button>
@@ -478,78 +365,13 @@
             </div>
 
             <div id="projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Project 1 -->
-                <div class="project-item bg-gray-900 p-6 rounded-lg shadow-md animate-on-scroll animate-slide-in-from-bottom delay-100 hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 border border-gray-800" data-category="featured">
-                    <h3 class="text-xl font-semibold mb-3 text-white"><i class="fas fa-link mr-2 text-purple-400"></i>NFT Marketplace</h3>
-                    <p class="text-gray-400 mb-4 text-sm">Built a blockchain-based NFT marketplace with a focus on security and asset uniqueness. Worked in a team of three to deliver a secure, user-friendly platform for trading digital assets.</p>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="bg-gray-700 text-gray-300 text-xs px-3 py-1 rounded-full">Blockchain</span>
-                        <span class="bg-gray-700 text-gray-300 text-xs px-3 py-1 rounded-full">NFT</span>
-                        <span class="bg-gray-700 text-gray-300 text-xs px-3 py-1 rounded-full">Smart Contracts</span>
-                    </div>
-                    <p class="text-gray-500 text-sm mb-4">B.Tech Final Year Project</p>
-                    <div class="flex justify-between items-center text-sm">
-                        <a href="#" class="text-purple-400 hover:underline">Details</a>
-                        <a href="https://github.com/ishikasahu" target="_blank" class="text-purple-400 hover:underline"><i class="fab fa-github mr-1"></i>View source code</a>
-                    </div>
                 </div>
-
-                <!-- Project 2 -->
-                <div class="project-item bg-gray-900 p-6 rounded-lg shadow-md animate-on-scroll animate-slide-in-from-bottom delay-200 hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 border border-gray-800" data-category="featured">
-                    <h3 class="text-xl font-semibold mb-3 text-white"><i class="fas fa-globe mr-2 text-purple-400"></i>GNI Conference Website</h3>
-                    <p class="text-gray-400 mb-4 text-sm">Developed the official conference website for Guru Nanak Institutions, Hyderabad. Managed both design and development in a collaborative remote setting.</p>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="bg-gray-700 text-gray-300 text-xs px-3 py-1 rounded-full">HTML5</span>
-                        <span class="bg-gray-700 text-gray-300 text-xs px-3 py-1 rounded-full">CSS3</span>
-                        <span class="bg-gray-700 text-gray-300 text-xs px-3 py-1 rounded-full">JavaScript</span>
-                        <span class="bg-gray-700 text-gray-300 text-xs px-3 py-1 rounded-full">Bootstrap</span>
-                    </div>
-                    <p class="text-gray-500 text-sm mb-4"></p>
-                    <div class="flex justify-between items-center text-sm">
-                        <a href="#" class="text-purple-400 hover:underline">Details</a>
-                        <a href="https://github.com/ishikasahu" target="_blank" class="text-purple-400 hover:underline"><i class="fab fa-github mr-1"></i>View source code</a>
-                    </div>
-                </div>
-
-                <!-- Project 3 -->
-                <div class="project-item bg-gray-900 p-6 rounded-lg shadow-md animate-on-scroll animate-slide-in-from-bottom delay-300 hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 border border-gray-800" data-category="featured">
-                    <h3 class="text-xl font-semibold mb-3 text-white"><i class="fab fa-react mr-2 text-purple-400"></i>Web App with React</h3>
-                    <p class="text-gray-400 mb-4 text-sm">Built a web application using ReactJS as part of a hands-on internship program at HTML Hints. This project helped enhance front-end and state management skills.</p>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="bg-gray-700 text-gray-300 text-xs px-3 py-1 rounded-full">React</span>
-                        <span class="bg-gray-700 text-gray-300 text-xs px-3 py-1 rounded-full">JavaScript</span>
-                        <span class="bg-gray-700 text-gray-300 text-xs px-3 py-1 rounded-full">CSS</span>
-                    </div>
-                    <p class="text-gray-500 text-sm mb-4">HTML Hints Internship</p>
-                    <div class="flex justify-between items-center text-sm">
-                        <a href="#" class="text-purple-400 hover:underline">Details</a>
-                        <a href="https://github.com/ishikasahu" target="_blank" class="text-purple-400 hover:underline"><i class="fab fa-github mr-1"></i>View source code</a>
-                    </div>
-                </div>
-
-                <!-- Project 4 -->
-                <div class="project-item bg-gray-900 p-6 rounded-lg shadow-md animate-on-scroll animate-slide-in-from-bottom delay-400 hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 border border-gray-800" data-category="all">
-                    <h3 class="text-xl font-semibold mb-3 text-white"><i class="fas fa-bullhorn mr-2 text-purple-400"></i>Brochure Design – Guru Ghasidas University</h3>
-                    <p class="text-gray-400 mb-4 text-sm">Designed a university brochure highlighting campus departments and events. Merged creativity and communication to deliver an impactful design.</p>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="bg-gray-700 text-gray-300 text-xs px-3 py-1 rounded-full">Graphic Design</span>
-                        <span class="bg-gray-700 text-gray-300 text-xs px-3 py-1 rounded-full">Adobe InDesign</span>
-                        <span class="bg-gray-700 text-gray-300 text-xs px-3 py-1 rounded-full">Visual Communication</span>
-                    </div>
-                    <p class="text-gray-500 text-sm mb-4"></p>
-                    <div class="flex justify-between items-center text-sm">
-                        <a href="#" class="text-purple-400 hover:underline">Details</a>
-                        <!-- No source code for design project -->
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
-    <!-- Experience Section -->
     <section id="experience" class="py-20 px-4 bg-gray-900">
         <div class="container mx-auto max-w-5xl">
-            <h2 class="text-4xl font-bold text-center mb-12 text-purple-400 animate-on-scroll animate-fade-in">Experience</h2>
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text animate-on-scroll animate-fade-in">Experience & Education</h2>
 
             <div class="flex flex-col md:flex-row justify-center gap-8 mb-12 animate-on-scroll animate-fade-in delay-100">
                 <button class="experience-filter-btn px-6 py-2 rounded-full bg-purple-600 text-white font-semibold hover:bg-purple-700 transition-colors duration-300" data-filter="work">Work Experience</button>
@@ -557,12 +379,11 @@
             </div>
 
             <div id="experience-container" class="space-y-10">
-                <!-- Work Experience -->
                 <div class="experience-item relative pl-8 md:pl-16 border-l-2 border-purple-600 animate-on-scroll animate-slide-in-from-bottom delay-100" data-category="work">
-                    <div class="absolute -left-2 md:-left-2.5 top-0 w-4 h-4 bg-purple-600 rounded-full"></div>
+                    <div class="absolute -left-2 md:-left-2.5 top-0 w-4 h-4 gradient-bg rounded-full"></div>
                     <h3 class="text-2xl font-semibold text-white">Technical Assistant</h3>
                     <p class="text-purple-300 text-lg mb-2">IIT Jodhpur</p>
-                    <p class="text-gray-400 text-sm mb-4">June 2025 - Present</p>
+                    <p class="text-gray-400 text-sm mb-4">June 2024 - Present</p>
                     <ul class="list-disc list-inside text-gray-300 space-y-2">
                         <li>Provide technical support for lab and departmental systems</li>
                         <li>Troubleshoot infrastructure and user issues</li>
@@ -577,10 +398,10 @@
                 </div>
 
                 <div class="experience-item relative pl-8 md:pl-16 border-l-2 border-purple-600 animate-on-scroll animate-slide-in-from-bottom delay-200" data-category="work">
-                    <div class="absolute -left-2 md:-left-2.5 top-0 w-4 h-4 bg-purple-600 rounded-full"></div>
+                    <div class="absolute -left-2 md:-left-2.5 top-0 w-4 h-4 gradient-bg rounded-full"></div>
                     <h3 class="text-2xl font-semibold text-white">Junior Software Engineer</h3>
                     <p class="text-purple-300 text-lg mb-2">TechSpawn Solutions</p>
-                    <p class="text-gray-400 text-sm mb-4">Sept 2023 - June 2025</p>
+                    <p class="text-gray-400 text-sm mb-4">Sept 2023 - June 2024</p>
                     <ul class="list-disc list-inside text-gray-300 space-y-2">
                         <li>Developed and optimized CRM workflows, backend services, and landing pages</li>
                         <li>Integrated APIs: QuickBooks, Mailchimp, Google Drive & Sheets</li>
@@ -598,7 +419,7 @@
                 </div>
 
                 <div class="experience-item relative pl-8 md:pl-16 border-l-2 border-purple-600 animate-on-scroll animate-slide-in-from-bottom delay-300" data-category="work">
-                    <div class="absolute -left-2 md:-left-2.5 top-0 w-4 h-4 bg-purple-600 rounded-full"></div>
+                    <div class="absolute -left-2 md:-left-2.5 top-0 w-4 h-4 gradient-bg rounded-full"></div>
                     <h3 class="text-2xl font-semibold text-white">AWS Cloud Computing Intern</h3>
                     <p class="text-purple-300 text-lg mb-2">LinuxWorld Informatics Pvt Ltd</p>
                     <p class="text-gray-400 text-sm mb-4">June 2023 - Sept 2023</p>
@@ -615,7 +436,7 @@
                 </div>
 
                 <div class="experience-item relative pl-8 md:pl-16 border-l-2 border-purple-600 animate-on-scroll animate-slide-in-from-bottom delay-400" data-category="work">
-                    <div class="absolute -left-2 md:-left-2.5 top-0 w-4 h-4 bg-purple-600 rounded-full"></div>
+                    <div class="absolute -left-2 md:-left-2.5 top-0 w-4 h-4 gradient-bg rounded-full"></div>
                     <h3 class="text-2xl font-semibold text-white">Web Developer</h3>
                     <p class="text-purple-300 text-lg mb-2">Guru Nanak Institutions</p>
                     <p class="text-gray-400 text-sm mb-4">April 2022 - June 2022</p>
@@ -631,7 +452,7 @@
                 </div>
 
                 <div class="experience-item relative pl-8 md:pl-16 border-l-2 border-purple-600 animate-on-scroll animate-slide-in-from-bottom delay-500" data-category="work">
-                    <div class="absolute -left-2 md:-left-2.5 top-0 w-4 h-4 bg-purple-600 rounded-full"></div>
+                    <div class="absolute -left-2 md:-left-2.5 top-0 w-4 h-4 gradient-bg rounded-full"></div>
                     <h3 class="text-2xl font-semibold text-white">Lead Graphic Designer</h3>
                     <p class="text-purple-300 text-lg mb-2">DSC GGV</p>
                     <p class="text-gray-400 text-sm mb-4">March 2021 - Jan 2022</p>
@@ -645,155 +466,127 @@
                     </div>
                 </div>
 
-                <!-- Education (already in About, but keeping this structure for consistency if more detailed education was needed) -->
-                <div class="experience-item relative pl-8 md:pl-16 border-l-2 border-purple-600 animate-on-scroll animate-slide-in-from-bottom delay-600" data-category="education" style="display: none;">
-                    <div class="absolute -left-2 md:-left-2.5 top-0 w-4 h-4 bg-purple-600 rounded-full"></div>
+                <div class="experience-item relative pl-8 md:pl-16 border-l-2 border-sky-600 animate-on-scroll animate-slide-in-from-bottom delay-600" data-category="education" style="display: none;">
+                    <div class="absolute -left-2 md:-left-2.5 top-0 w-4 h-4 gradient-bg rounded-full"></div>
                     <h3 class="text-2xl font-semibold text-white">B.Tech in Information Technology</h3>
-                    <p class="text-purple-300 text-lg mb-2">Guru Ghasidas University</p>
+                    <p class="text-sky-300 text-lg mb-2">Guru Ghasidas University</p>
                     <p class="text-gray-400 text-sm mb-4">2019–2023</p>
-                    <p class="text-gray-300">Completed Bachelor of Technology in Information Technology.</p>
+                </div>
+                <div class="experience-item relative pl-8 md:pl-16 border-l-2 border-sky-600 animate-on-scroll animate-slide-in-from-bottom delay-600" data-category="education" style="display: none;">
+                    <div class="absolute -left-2 md:-left-2.5 top-0 w-4 h-4 gradient-bg rounded-full"></div>
+                    <h3 class="text-2xl font-semibold text-white">Higher Secondary Education</h3>
+                    <p class="text-sky-300 text-lg mb-2">St. Dominic Savio</p>
+                    <p class="text-gray-400 text-sm mb-4">2016-2018</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Certifications Section -->
     <section id="certifications" class="py-20 px-4 bg-gray-950">
         <div class="container mx-auto max-w-5xl">
-            <h2 class="text-4xl font-bold text-center mb-12 text-purple-400 animate-on-scroll animate-fade-in">Certifications</h2>
-            <p class="text-center text-gray-400 mb-10 animate-on-scroll animate-fade-in delay-100">Professional certifications and courses I've completed</p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-gray-900 p-6 rounded-lg shadow-md animate-on-scroll animate-slide-in-from-bottom delay-100 hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 border border-gray-800">
-                    <h3 class="text-xl font-semibold text-white mb-2">Web Developer</h3>
-                    <p class="text-gray-400 mb-3">ShapeAI, GNI, NIELIT</p>
-                    <p class="text-purple-400 text-sm">2022</p>
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text animate-on-scroll animate-fade-in">My Certifications</h2>
+            
+            <div id="certifications-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 </div>
-                <div class="bg-gray-900 p-6 rounded-lg shadow-md animate-on-scroll animate-slide-in-from-bottom delay-200 hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 border border-gray-800">
-                    <h3 class="text-xl font-semibold text-white mb-2">Graphic Designer</h3>
-                    <p class="text-gray-400 mb-3">DSC GGV</p>
-                    <p class="text-purple-400 text-sm">2022</p>
-                </div>
-                <div class="bg-gray-900 p-6 rounded-lg shadow-md animate-on-scroll animate-slide-in-from-bottom delay-300 hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 border border-gray-800">
-                    <h3 class="text-xl font-semibold text-white mb-2">30-Day Google Cloud Program</h3>
-                    <p class="text-gray-400 mb-3">Google Cloud</p>
-                    <p class="text-purple-400 text-sm">2022</p>
-                </div>
-                <div class="bg-gray-900 p-6 rounded-lg shadow-md animate-on-scroll animate-slide-in-from-bottom delay-400 hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 border border-gray-800">
-                    <h3 class="text-xl font-semibold text-white mb-2">Web Development: HTML, CSS, JavaScript</h3>
-                    <p class="text-gray-400 mb-3">Web Development Workshop</p>
-                    <p class="text-purple-400 text-sm">2022</p>
-                </div>
-                <div class="bg-gray-900 p-6 rounded-lg shadow-md animate-on-scroll animate-slide-in-from-bottom delay-500 hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 border border-gray-800">
-                    <h3 class="text-xl font-semibold text-white mb-2">UI Development Workshop (ReactJS)</h3>
-                    <p class="text-gray-400 mb-3">React Workshop</p>
-                    <p class="text-purple-400 text-sm">2022</p>
-                </div>
-            </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
     <section id="contact" class="py-20 px-4 bg-gray-900">
         <div class="container mx-auto max-w-5xl">
-            <h2 class="text-4xl font-bold text-center mb-12 text-purple-400 animate-on-scroll animate-fade-in">Get In Touch</h2>
-            <p class="text-center text-gray-400 mb-10 animate-on-scroll animate-fade-in delay-100">
-                I'm interested in freelance opportunities, especially ambitious projects. However, if you have any requests or questions, don't hesitate to use the form.
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <!-- Contact Info -->
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text animate-on-scroll animate-fade-in">Get In Touch</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <div class="space-y-6 animate-on-scroll animate-slide-left delay-200">
+                    <p class="text-gray-400 mb-10 animate-on-scroll animate-fade-in delay-100">
+                        I'm interested in freelance opportunities, especially ambitious projects. However, if you have any requests or questions, don't hesitate to use the form.
+                    </p>
                     <div class="flex items-center space-x-4 bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-700">
-                        <i class="fas fa-envelope text-3xl text-purple-400"></i>
+                        <i class="fas fa-envelope text-3xl gradient-text"></i>
                         <div>
                             <h3 class="text-lg font-semibold text-white">Email</h3>
-                            <p class="text-gray-300">ishikasahu@example.com</p>
+                            <p class="text-gray-300">sahuishika2000@gmail.com</p>
                         </div>
                     </div>
                     <div class="flex items-center space-x-4 bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-700">
-                        <i class="fab fa-linkedin text-3xl text-purple-400"></i>
+                        <i class="fab fa-linkedin text-3xl gradient-text"></i>
                         <div>
                             <h3 class="text-lg font-semibold text-white">LinkedIn</h3>
-                            <p class="text-gray-300">in/ishika-sahu-0709</p>
+                            <p class="text-gray-300">ishika-sahu-0709</p>
                         </div>
                     </div>
                     <div class="flex items-center space-x-4 bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-700">
-                        <i class="fab fa-github text-3xl text-purple-400"></i>
+                        <i class="fab fa-github text-3xl gradient-text"></i>
                         <div>
                             <h3 class="text-lg font-semibold text-white">GitHub</h3>
-                            <p class="text-gray-300">github.com/ishikasahu</p>
+                            <p class="text-gray-300">ishikasahu</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Contact Form -->
-                <form class="space-y-6 animate-on-scroll animate-slide-right delay-300">
+                <form id="contact-form" action="https://formspree.io/f/xdkdpkga" method="POST" class="space-y-6 animate-on-scroll animate-slide-right delay-300">
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-300 mb-1">Name</label>
-                        <input type="text" id="name" name="name" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50 text-white placeholder-gray-400" placeholder="Your name">
+                        <input type="text" id="name" name="name" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 text-white placeholder-gray-400" placeholder="Your name" required>
                     </div>
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email</label>
-                        <input type="email" id="email" name="email" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50 text-white placeholder-gray-400" placeholder="Your email">
+                        <input type="email" id="email" name="email" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 text-white placeholder-gray-400" placeholder="Your email" required>
                     </div>
                     <div>
                         <label for="subject" class="block text-sm font-medium text-gray-300 mb-1">Subject</label>
-                        <input type="text" id="subject" name="subject" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50 text-white placeholder-gray-400" placeholder="Subject">
+                        <input type="text" id="subject" name="subject" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 text-white placeholder-gray-400" placeholder="Subject">
                     </div>
                     <div>
                         <label for="message" class="block text-sm font-medium text-gray-300 mb-1">Message</label>
-                        <textarea id="message" name="message" rows="5" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50 text-white placeholder-gray-400" placeholder="Your message"></textarea>
+                        <textarea id="message" name="message" rows="5" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 text-white placeholder-gray-400" placeholder="Your message" required></textarea>
                     </div>
-                    <button type="submit" class="w-full px-8 py-3 bg-purple-600 text-white font-semibold rounded-full shadow-lg hover:bg-purple-700 transition-all transform hover:scale-105 duration-300">
+                    <button type="submit" class="w-full gradient-button px-8 py-3 text-white font-semibold rounded-full shadow-lg transition-all transform hover:scale-105 duration-300">
                         Send Message
                     </button>
+                    <p id="form-status" class="text-center mt-4"></p>
                 </form>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-950 py-10 px-4 text-center text-gray-400">
-        <div class="container mx-auto">
-            <h3 class="text-2xl font-bold text-purple-400 mb-4">Ishika Sahu</h3>
-            <p class="mb-6">Full Stack Developer</p>
-            <div class="flex justify-center space-x-6 mb-6">
-                <a href="https://www.linkedin.com/in/ishika-sahu-0709" target="_blank" class="text-gray-400 hover:text-purple-400 transition-colors duration-300 text-2xl">
+    <footer class="bg-gray-950 py-10 px-4 text-gray-400">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="text-center md:text-left mb-6 md:mb-0">
+                <h3 class="text-2xl font-bold gradient-text mb-1">Ishika Sahu</h3>
+                <p class="text-gray-300">Full Stack Developer</p>
+            </div>
+            <div class="flex space-x-6 mb-6 md:mb-0">
+                <a href="https://www.linkedin.com/in/ishika-sahu-0709" target="_blank" class="text-gray-400 hover:text-sky-400 transition-colors duration-300 text-2xl">
                     <i class="fab fa-linkedin"></i>
                 </a>
-                <a href="https://github.com/ishikasahu" target="_blank" class="text-gray-400 hover:text-purple-400 transition-colors duration-300 text-2xl">
+                <a href="https://github.com/ishikasahu" target="_blank" class="text-gray-400 hover:text-sky-400 transition-colors duration-300 text-2xl">
                     <i class="fab fa-github"></i>
                 </a>
-                <a href="mailto:ishikasahu@example.com" class="text-gray-400 hover:text-purple-400 transition-colors duration-300 text-2xl">
+                <a href="mailto:sahuishika2000@gmail.com" class="text-gray-400 hover:text-sky-400 transition-colors duration-300 text-2xl">
                     <i class="fas fa-envelope"></i>
                 </a>
             </div>
-            <p class="text-sm">&copy; 2025 Ishika Sahu. All rights reserved.</p>
-            <div class="mt-4 text-sm text-gray-500">
-                <p>Made with ❤️ by <a href="#" class="text-purple-400 hover:underline">Ishika Sahu</a></p>
-                <p><a href="#" class="text-purple-400 hover:underline">Explore More</a></p>
+        </div>
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center mt-4 text-sm text-gray-500">
+            <p>&copy; 2024 Ishika Sahu. All rights reserved.</p>
+            <div class="flex items-center space-x-2 mt-2 md:mt-0">
+                <p>Made by</p>
+                <a href="#" class="gradient-text hover:underline"><i class="fas fa-code"></i></a>
             </div>
         </div>
     </footer>
 
-    <!-- Scroll to top button -->
-    <button id="scroll-to-top" class="fixed bottom-6 right-6 bg-purple-600 text-white p-3 rounded-full shadow-lg hover:bg-purple-700 transition-all transform hover:scale-110 duration-300 hidden">
+    <button id="scroll-to-top" class="fixed bottom-6 right-6 gradient-bg text-white p-3 rounded-full shadow-lg hover:bg-purple-700 transition-all transform hover:scale-110 duration-300 hidden">
         <i class="fas fa-arrow-up"></i>
     </button>
 
     <script>
-        // JavaScript for animations and interactivity
-
-        // Mobile menu toggle
+        // --- Mobile Menu ---
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
-
         mobileMenuButton.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
-
-        // Close mobile menu when a link is clicked
         const mobileMenuLinks = mobileMenu.querySelectorAll('a');
         mobileMenuLinks.forEach(link => {
             link.addEventListener('click', () => {
@@ -801,185 +594,318 @@
             });
         });
 
-        // Intersection Observer for scroll animations
-        const animateOnScrollElements = document.querySelectorAll('.animate-on-scroll');
-
+        // --- Intersection Observer for Scroll Animations ---
         const observerOptions = {
-            root: null, // viewport
+            root: null,
             rootMargin: '0px',
-            threshold: 0.1 // Trigger when 10% of the element is visible
+            threshold: 0.1
         };
-
         const observer = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Apply delay if specified
                     const delayClass = Array.from(entry.target.classList).find(cls => cls.startsWith('delay-'));
                     if (delayClass) {
                         entry.target.style.animationDelay = `${parseInt(delayClass.replace('delay-', '')) / 1000}s`;
                     }
                     entry.target.classList.add('is-visible');
-
-                    // Trigger skill bar animation
                     if (entry.target.classList.contains('animate-skill-bar')) {
                         const skillBarFill = entry.target.querySelector('.skill-bar-fill');
                         if (skillBarFill) {
                             const skillWidth = skillBarFill.style.getPropertyValue('--skill-width');
-                            skillBarFill.style.width = skillWidth; // Set final width to trigger CSS animation
+                            skillBarFill.style.width = skillWidth;
                         }
                     }
-
-                    observer.unobserve(entry.target); // Stop observing once animated
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        animateOnScrollElements.forEach(element => {
-            observer.observe(element);
+        // --- Initial DOM Content Loaded Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Observe all elements with .animate-on-scroll class
+            const animateOnScrollElements = document.querySelectorAll('.animate-on-scroll');
+            animateOnScrollElements.forEach(element => {
+                observer.observe(element);
+            });
+
+            // Initial animation for Hero section elements on load
+            const heroElements = document.querySelectorAll('#home .animate-on-scroll');
+            heroElements.forEach(el => {
+                el.classList.add('is-visible');
+            });
+            
+            // --- Skills Data & Generation ---
+             const skillsData = {
+                frontend: [
+                    { name: 'HTML/CSS', level: '90%', icon: 'fab fa-html5', color: 'text-orange-500' },
+                    { name: 'JavaScript', level: '85%', icon: 'fab fa-js-square', color: 'text-yellow-500' },
+                    { name: 'React.js', level: '85%', icon: 'fab fa-react', color: 'text-blue-400' },
+                    { name: 'TypeScript', level: '80%', icon: 'fas fa-code', color: 'text-blue-500' },
+                ],
+                backend: [
+                    { name: 'Node.js', level: '80%', icon: 'fab fa-node-js', color: 'text-green-500' },
+                    { name: 'Python', level: '85%', icon: 'fab fa-python', color: 'text-blue-600' },
+                    { name: 'Java', level: '70%', icon: 'fab fa-java', color: 'text-red-500' },
+                    { name: 'SQL/NoSQL', level: '75%', icon: 'fas fa-database', color: 'text-gray-400' },
+                ],
+                tools: [
+                    { name: 'Git & GitHub', level: '90%', icon: 'fab fa-git-alt', color: 'text-orange-600' },
+                    { name: 'Docker', level: '75%', icon: 'fab fa-docker', color: 'text-blue-600' },
+                    { name: 'CI/CD', level: '70%', icon: 'fas fa-cogs', color: 'text-gray-500' },
+                ],
+                cloud: [
+                    { name: 'AWS', level: '80%', icon: 'fab fa-aws', color: 'text-orange-400' },
+                    { name: 'Azure', level: '70%', icon: 'fab fa-microsoft', color: 'text-blue-500' },
+                ]
+            };
+
+            const skillsContainer = document.getElementById('skills-container');
+            const skillFilterButtons = document.querySelectorAll('.skill-filter-btn');
+
+            function renderSkills(filter = 'all') {
+                skillsContainer.innerHTML = '';
+                let skillsToRender = [];
+
+                if (filter === 'all') {
+                    skillsToRender = [].concat(...Object.values(skillsData));
+                } else {
+                    skillsToRender = skillsData[filter] || [];
+                }
+
+                skillsToRender.forEach((skill, index) => {
+                    const delay = (index + 1) * 100;
+                    const skillElement = document.createElement('div');
+                    skillElement.className = 'skill-item animate-on-scroll animate-skill-bar';
+                    skillElement.style.animationDelay = `${delay}ms`;
+                    skillElement.innerHTML = `
+                        <h3 class="text-lg font-semibold mb-2 text-white"><i class="${skill.icon} mr-2 ${skill.color}"></i>${skill.name}</h3>
+                        <div class="skill-bar-bg">
+                            <div class="skill-bar-fill" style="--skill-width: ${skill.level};"></div>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-400 mt-1"><span>Beginner</span><span>Intermediate</span><span>Expert</span></div>
+                    `;
+                    skillsContainer.appendChild(skillElement);
+                    observer.observe(skillElement);
+                });
+            }
+
+            skillFilterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    skillFilterButtons.forEach(btn => {
+                        btn.classList.remove('bg-purple-600', 'text-white');
+                        btn.classList.add('bg-gray-700', 'text-gray-300');
+                    });
+                    button.classList.add('bg-purple-600', 'text-white');
+                    button.classList.remove('bg-gray-700', 'text-gray-300');
+                    renderSkills(button.dataset.filter);
+                });
+            });
+
+            renderSkills(); // Initial render
+
+            // --- Projects Data & Generation ---
+            const projectsData = [
+                {
+                    title: 'NFT Marketplace',
+                    category: 'featured',
+                    subtitle: 'B.Tech Final Year Project',
+                    description: 'Built a blockchain-based NFT marketplace with a focus on security and asset uniqueness. Worked in a team of three to deliver a secure, user-friendly platform for trading digital assets.',
+                    tags: ['Blockchain', 'NFT', 'Smart Contracts'],
+                    link: 'https://github.com/ishikasahu'
+                },
+                {
+                    title: 'Conference Website',
+                    category: 'featured',
+                    subtitle: 'Guru Nanak Institutions',
+                    description: 'Developed the official conference website for Guru Nanak Institutions, Hyderabad. Managed both design and development in a collaborative remote setting.',
+                    tags: ['HTML5', 'CSS3', 'JavaScript', 'Bootstrap'],
+                    link: 'https://github.com/ishikasahu'
+                },
+                {
+                    title: 'Web App with React',
+                    category: 'featured',
+                    subtitle: 'HTML Hints Internship',
+                    description: 'Built a web application using ReactJS as part of a hands-on internship program at HTML Hints. This project helped enhance front-end and state management skills.',
+                    tags: ['React', 'JavaScript', 'CSS'],
+                    link: 'https://github.com/ishikasahu'
+                },
+                {
+                    title: 'Brochure Design',
+                    category: 'all',
+                    subtitle: 'Guru Ghasidas University',
+                    description: 'Designed a university brochure highlighting campus departments and events. Merged creativity and communication to deliver an impactful design.',
+                    tags: ['Graphic Design', 'Adobe InDesign', 'Visual Communication'],
+                    link: 'https://github.com/ishikasahu'
+                }
+            ];
+
+            const projectsContainer = document.getElementById('projects-container');
+            const projectFilterButtons = document.querySelectorAll('.project-filter-btn');
+
+            function renderProjects(filter = 'all') {
+                projectsContainer.innerHTML = '';
+                const projectsToRender = filter === 'all' 
+                    ? projectsData 
+                    : projectsData.filter(p => p.category === filter || p.category === 'all');
+
+                projectsToRender.forEach((project, index) => {
+                    const delay = (index + 1) * 100;
+                    const projectElement = document.createElement('div');
+                    projectElement.className = 'project-item bg-gray-900 p-6 rounded-lg shadow-md animate-on-scroll animate-slide-in-from-bottom hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2 border border-gray-800';
+                    projectElement.style.animationDelay = `${delay}ms`;
+                    projectElement.innerHTML = `
+                        <h3 class="text-xl font-semibold mb-3 text-white"><i class="fas fa-link mr-2 gradient-text"></i>${project.title}</h3>
+                        <p class="text-gray-500 text-sm mb-4">${project.subtitle}</p>
+                        <p class="text-gray-400 mb-4 text-sm">${project.description}</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            ${project.tags.map(tag => `<span class="bg-gray-700 text-gray-300 text-xs px-3 py-1 rounded-full">${tag}</span>`).join('')}
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <a href="${project.link}" target="_blank" class="text-sky-400 hover:underline"><i class="fab fa-github mr-1"></i>View source code</a>
+                        </div>
+                    `;
+                    projectsContainer.appendChild(projectElement);
+                    observer.observe(projectElement);
+                });
+            }
+            
+            projectFilterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    projectFilterButtons.forEach(btn => {
+                        btn.classList.remove('bg-purple-600', 'text-white');
+                        btn.classList.add('bg-gray-700', 'text-gray-300');
+                    });
+                    button.classList.add('bg-purple-600', 'text-white');
+                    button.classList.remove('bg-gray-700', 'text-gray-300');
+                    renderProjects(button.dataset.filter);
+                });
+            });
+
+            renderProjects(); // Initial Render
+
+            // --- Certifications Data & Generation ---
+            const certificationsData = [
+              { id: 1, name: "AWS Cloud Computing", issuer: "LinuxWorld Informatics Pvt Ltd", link: "https://drive.google.com/file/d/12pT9MQ-I_SH5EyZmimMkh09UGuj1lSQP/view?usp=sharing" },
+              { id: 2, name: "Graphic Designer", issuer: "Guru Ghasidas Vishwavidyalaya", link: "https://drive.google.com/file/d/1QCRWGIxMQunWu3DjW9_f30fg9ADdjGd6/view?usp=sharing" },
+              { id: 3, name: "Graphic Designer", issuer: "Developer Student Clubs - GGV", link: "https://drive.google.com/file/d/1MZkL7EhShbkXhuNZHDAA15HqUnGbMRcL/view?usp=sharing" },
+              { id: 4, name: "Web Application Development", issuer: "NIELIT Haridwar", link: "https://drive.google.com/file/d/1Yg9ZcoAC7nF6yR0xqGBezXXmHVBv1XkI/view?usp=sharing" },
+              { id: 5, name: "UI Development", issuer: "HTML Hints", link: "https://drive.google.com/file/d/1UQVJG9Z4gDTLTeYvPXkvr6RlwWpkinXw/view?usp=sharing" },
+              { id: 6, name: "Basic Web Development", issuer: "ShapeAI", link: "https://drive.google.com/file/d/1BCzb7F4GehbauzH1ZIJvTM_FURpVXXGo/view?usp=sharing" }
+            ];
+
+            const certificationsContainer = document.getElementById('certifications-container');
+            if (certificationsContainer) {
+                let generatedHTML = '';
+                certificationsData.forEach((cert, index) => {
+                    const delay = (index + 1) * 100;
+                    generatedHTML += `
+                        <div class="bg-gray-900 p-6 rounded-lg shadow-md animate-on-scroll hover:shadow-purple-500/20 transition-all duration-300 transform hover:-translate-y-2 border border-gray-800" style="animation-delay: ${delay}ms;">
+                            <h3 class="text-xl font-semibold text-white mb-2">${cert.name}</h3>
+                            <p class="text-gray-400 mb-4">${cert.issuer}</p>
+                            <a href="${cert.link}" target="_blank" rel="noopener noreferrer" class="gradient-button inline-block px-5 py-2 text-sm font-semibold text-white rounded-full transition-colors duration-300">
+                                View Certificate <i class="fas fa-external-link-alt ml-1"></i>
+                            </a>
+                        </div>
+                    `;
+                });
+                certificationsContainer.innerHTML = generatedHTML;
+                
+                const newAnimatedElements = certificationsContainer.querySelectorAll('.animate-on-scroll');
+                newAnimatedElements.forEach(element => {
+                    observer.observe(element);
+                });
+            }
         });
 
-
-        // Skill filter functionality
-        const skillFilterButtons = document.querySelectorAll('.skill-filter-btn');
-        const skillItems = document.querySelectorAll('.skill-item');
-
-        skillFilterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active state from all buttons
-                skillFilterButtons.forEach(btn => {
-                    btn.classList.remove('bg-purple-600', 'text-white');
-                    btn.classList.add('bg-gray-700', 'text-gray-300');
-                });
-                // Add active state to clicked button
-                button.classList.remove('bg-gray-700', 'text-gray-300');
-                button.classList.add('bg-purple-600', 'text-white');
-
-                const filter = button.dataset.filter;
-                skillItems.forEach(item => {
-                    if (filter === 'all' || item.dataset.category === filter) {
-                        item.style.display = 'block';
-                        // Re-trigger animation for visible items
-                        item.classList.remove('is-visible'); // Remove to reset animation
-                        void item.offsetWidth; // Trigger reflow
-                        item.classList.add('is-visible'); // Add back to re-trigger animation
-
-                        // Re-animate skill bars
-                        const skillBarFill = item.querySelector('.skill-bar-fill');
-                        if (skillBarFill) {
-                            const skillWidth = skillBarFill.style.getPropertyValue('--skill-width');
-                            skillBarFill.style.width = '0%'; // Reset width
-                            setTimeout(() => {
-                                skillBarFill.style.width = skillWidth; // Set final width
-                            }, 50); // Small delay to ensure reset takes effect
+        // --- Filter Functionality (Experience) ---
+        function setupFilter(buttonClass, itemClass) {
+            const filterButtons = document.querySelectorAll(buttonClass);
+            const items = document.querySelectorAll(itemClass);
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('bg-purple-600', 'text-white');
+                        btn.classList.add('bg-gray-700', 'text-gray-300');
+                    });
+                    button.classList.add('bg-purple-600', 'text-white');
+                    button.classList.remove('bg-gray-700', 'text-gray-300');
+                    
+                    const filter = button.dataset.filter;
+                    items.forEach(item => {
+                        if (filter === 'all' || item.dataset.category === filter) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
                         }
-
-                    } else {
-                        item.style.display = 'none';
-                    }
+                    });
                 });
             });
-        });
+        }
+        setupFilter('.experience-filter-btn', '.experience-item');
 
-        // Project filter functionality
-        const projectFilterButtons = document.querySelectorAll('.project-filter-btn');
-        const projectItems = document.querySelectorAll('.project-item');
-
-        projectFilterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active state from all buttons
-                projectFilterButtons.forEach(btn => {
-                    btn.classList.remove('bg-purple-600', 'text-white');
-                    btn.classList.add('bg-gray-700', 'text-gray-300');
-                });
-                // Add active state to clicked button
-                button.classList.remove('bg-gray-700', 'text-gray-300');
-                button.classList.add('bg-purple-600', 'text-white');
-
-                const filter = button.dataset.filter;
-                projectItems.forEach(item => {
-                    if (filter === 'all' || item.dataset.category === filter) {
-                        item.style.display = 'block';
-                        // Re-trigger animation for visible items
-                        item.classList.remove('is-visible'); // Remove to reset animation
-                        void item.offsetWidth; // Trigger reflow
-                        item.classList.add('is-visible'); // Add back to re-trigger animation
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-            });
-        });
-
-        // Experience filter functionality
-        const experienceFilterButtons = document.querySelectorAll('.experience-filter-btn');
-        const experienceItems = document.querySelectorAll('.experience-item');
-
-        experienceFilterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active state from all buttons
-                experienceFilterButtons.forEach(btn => {
-                    btn.classList.remove('bg-purple-600', 'text-white');
-                    btn.classList.add('bg-gray-700', 'text-gray-300');
-                });
-                // Add active state to clicked button
-                button.classList.remove('bg-gray-700', 'text-gray-300');
-                button.classList.add('bg-purple-600', 'text-white');
-
-                const filter = button.dataset.filter;
-                experienceItems.forEach(item => {
-                    if (filter === 'all' || item.dataset.category === filter) {
-                        item.style.display = 'block';
-                        // Re-trigger animation for visible items
-                        item.classList.remove('is-visible'); // Remove to reset animation
-                        void item.offsetWidth; // Trigger reflow
-                        item.classList.add('is-visible'); // Add back to re-trigger animation
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-            });
-        });
-
-
-        // Scroll to top button visibility
+        // --- Scroll to Top Button ---
         const scrollToTopButton = document.getElementById('scroll-to-top');
-
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) { // Show button after scrolling down 300px
+            if (window.scrollY > 300) {
                 scrollToTopButton.classList.remove('hidden');
             } else {
                 scrollToTopButton.classList.add('hidden');
             }
         });
-
-        // Scroll to top functionality
         scrollToTopButton.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // Smooth scroll for navigation links
-        document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+        // --- Smooth Scroll for Navigation Links ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
             });
         });
 
-        // Initial animation for Hero section elements on load
-        document.addEventListener('DOMContentLoaded', () => {
-            // Select elements in the hero section that should animate on load
-            const heroElements = document.querySelectorAll('#home .animate-on-scroll');
-            heroElements.forEach(el => {
-                // Remove the initial hidden state and add the animation class
-                el.classList.add('is-visible');
-            });
-        });
+        // --- Contact Form Submission using AJAX ---
+        const form = document.getElementById('contact-form');
+        const formStatus = document.getElementById('form-status');
 
+        async function handleSubmit(event) {
+            event.preventDefault();
+            const status = document.getElementById('form-status');
+            const data = new FormData(event.target);
+            
+            status.innerText = 'Sending...';
+            status.classList.remove('text-green-500', 'text-red-500');
+
+            fetch(event.target.action, {
+                method: form.method,
+                body: data,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    status.innerText = "Thanks for your submission!";
+                    status.classList.add('text-green-500');
+                    form.reset();
+                } else {
+                    response.json().then(data => {
+                        if (Object.hasOwn(data, 'errors')) {
+                            status.innerText = data["errors"].map(error => error["message"]).join(", ");
+                        } else {
+                            status.innerText = "Oops! There was a problem submitting your form";
+                        }
+                        status.classList.add('text-red-500');
+                    })
+                }
+            }).catch(error => {
+                status.innerText = "Oops! There was a problem submitting your form";
+                status.classList.add('text-red-500');
+            });
+        }
+        form.addEventListener("submit", handleSubmit);
     </script>
 </body>
 </html>
